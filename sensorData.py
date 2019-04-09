@@ -4,6 +4,7 @@ from time import *
 import time
 import threading
 from sense_hat import SenseHat
+import json
 
 gpsd = None #seting the global variable
  
@@ -23,18 +24,34 @@ class SensorData(threading.Thread):
 		global gpsd
 		while gpsp.running:
 			gpsd.next() #this will continue to loop and grab EACH set of gpsd info to clear the buffer
+	
+	def toJsonfromSensor(self):
+		dict = {}
+		dict['temp'] = self.temp
+		dict['lat'] = self.lat
+		dict['long'] = self.long
+		jsonf = json.dumps(dict)
+		return jsonf
+		
 			
 	if __name__ == '__main__':
 		gpsp = SensorData() # create the thread
 		sense = SenseHat() 
+		mqtt_client = MqttClientConnector('geoTemp')
+		host = 'test.mosquitto.org'
+		topic = 'geoTemp'
 		try:
 			gpsp.start() # start it up
 			while True:
 			#It may take a second or two to get good data
 			#print gpsd.fix.latitude,', ',gpsd.fix.longitude,'  Time: ',gpsd.utc
 			os.system('clear')
-			self.lat = gpsd.fix.latitude
-			self.long = gpsd.fix.longitude
+			gpsp.lat = gpsd.fix.latitude
+			gpsp.long = gpsd.fix.longitude
+			gpsp.temp = 30.0
+			json_data = gpsp.toJsonfromSensor()
+			mqtt_client.publish(topic,json_data,host)
+						
  
 			print
 			print ' GPS reading'
