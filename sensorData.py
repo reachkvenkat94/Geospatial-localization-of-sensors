@@ -5,6 +5,7 @@ import time
 import threading
 from sense_hat import SenseHat
 import json
+from mqttClientConnector import mqttClientConnector
 
 gpsd = None #seting the global variable
  
@@ -48,7 +49,7 @@ class SensorData(threading.Thread):
 			os.system('clear')
 			gpsp.lat = gpsd.fix.latitude
 			gpsp.long = gpsd.fix.longitude
-			gpsp.temp = 30.0
+			gpsp.temp = sense.getTemperature()
 			json_data = gpsp.toJsonfromSensor()
 			mqtt_client.publish(topic,json_data,host)
 						
@@ -61,7 +62,7 @@ class SensorData(threading.Thread):
 			print 'time utc    ' , gpsd.utc,' + ', gpsd.fix.time
 			print 'altitude (m)' , gpsd.fix.altitude
 
-			time.sleep(5) #set to whatever
+			time.sleep(10) #set to whatever
 
 		except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
 		print "\nKilling Thread..."
