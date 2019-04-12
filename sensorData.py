@@ -67,7 +67,6 @@ class SensorData(threading.Thread):
 			json_data = gpsp.toJsonfromSensor()
 			mqtt_client.publish(topic,json_data,host)
 						
- 
 			print
 			print ' GPS reading'
 			print '----------------------------------------'
