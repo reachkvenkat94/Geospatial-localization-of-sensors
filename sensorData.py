@@ -1,3 +1,4 @@
+
 import os
 from gps import *
 from time import *
@@ -12,6 +13,7 @@ import busio
 import adafruit_si7021
 
 
+//Initializing I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
 sensor = adafruit_si7021.SI7021(i2c)
 
