@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyLocationApp</string>
+    <string name="btn_get">Get Updates</string>
+    <string name="btn_pause">Pause Updates</string>
+</resources>
